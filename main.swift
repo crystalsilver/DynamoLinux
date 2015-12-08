@@ -6,14 +6,15 @@ import Dynamo
 import Glibc
 #endif
 
-print( "Browse to http://localhost:8080/example" )
+system( "tar xfz site.tgz -C ~" )
 
 // create non-SSL server/proxy on 8080
 _ = DynamoWebServer( portNumber: 8080, swiftlets: [
     LoggingSwiftlet( logger: dynamoTrace ),
     ExampleAppSwiftlet( pathPrefix: "/example" ),
-    DocumentSwiftlet( documentRoot: "." )
+    SessionSwiftlet( pathPrefix: "/ticktacktoe",  appClass: TickTackToeSwiftlet.self, cookieName: "TTT" ),
+    DocumentSwiftlet( documentRoot: String.fromCString( getenv( "HOME" ) )!+"/Sites" )
 ] )
 
-// only returns libdispatch implemented
+// only returns when libdispatch implemented
 sleep( 1000000 )
