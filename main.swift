@@ -13,6 +13,7 @@ _ = DynamoWebServer( portNumber: 8080, swiftlets: [
     LoggingSwiftlet( logger: dynamoTrace ),
     ExampleAppSwiftlet( pathPrefix: "/example" ),
     SessionSwiftlet( pathPrefix: "/ticktacktoe",  appClass: TickTackToeSwiftlet.self, cookieName: "TTT" ),
+    SessionSwiftlet( pathPrefix: "/guesser",  appClass: NumberGuesserSwiftlet.self, cookieName: "NBR" ),
     DocumentSwiftlet( documentRoot: String.fromCString( getenv( "HOME" ) )!+"/Sites" )
 ] )
 
