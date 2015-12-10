@@ -14,8 +14,10 @@ _ = DynamoWebServer( portNumber: 8080, swiftlets: [
     ExampleAppSwiftlet( pathPrefix: "/example" ),
     SessionSwiftlet( pathPrefix: "/ticktacktoe",  appClass: TickTackToeSwiftlet.self, cookieName: "TTT" ),
     SessionSwiftlet( pathPrefix: "/guesser",  appClass: NumberGuesserSwiftlet.self, cookieName: "NBR" ),
+    SSLProxySwiftlet( logger: { (msg) in print( msg ) } ),
+    ProxySwiftlet( logger: { (msg) in print( msg ) } ),
     DocumentSwiftlet( documentRoot: String.fromCString( getenv( "HOME" ) )!+"/Sites" )
 ] )
 
-// only returns when libdispatch implemented
-sleep( 1000000 )
+// let pthreads do their work
+sleep( 1_000_000_000 )
