@@ -19,5 +19,14 @@ _ = DynamoWebServer( portNumber: 8080, swiftlets: [
     DocumentSwiftlet( documentRoot: String.fromCString( getenv( "HOME" ) )!+"/Sites" )
 ] )
 
+// create worker process based server on 8081
+_ = DynamoWorkerServer( portNumber: 8081, swiftlets: [
+    LoggingSwiftlet( logger: { (msg) in print( "\(getpid()): \(msg)" ) } ),
+    ExampleAppSwiftlet( pathPrefix: "/example" ),
+    SSLProxySwiftlet( logger: { (msg) in print( msg ) } ),
+    ProxySwiftlet( logger: { (msg) in print( msg ) } ),
+    DocumentSwiftlet( documentRoot: String.fromCString( getenv( "HOME" ) )!+"/Sites" )
+], workers: 4 )
+
 // let pthreads do their work
 sleep( 1_000_000_000 )
