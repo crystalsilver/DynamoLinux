@@ -16,7 +16,7 @@ _ = DynamoWebServer( portNumber: 8080, swiftlets: [
     SessionSwiftlet( pathPrefix: "/guesser",  appClass: NumberGuesserSwiftlet.self, cookieName: "NBR" ),
     SSLProxySwiftlet( logger: { (msg) in print( msg ) } ),
     ProxySwiftlet( logger: { (msg) in print( msg ) } ),
-    DocumentSwiftlet( documentRoot: String.fromCString( getenv( "HOME" ) )!+"/Sites" )
+    DocumentSwiftlet( documentRoot: String(cString: getenv( "HOME" ))+"/Sites" )
 ] )
 
 func pidLogger( msg: String ) {
@@ -27,12 +27,12 @@ func pidLogger( msg: String ) {
 // create worker process based server on 8081
 _ = DynamoWorkerServer( portNumber: 8081, swiftlets: [
     LoggingSwiftlet( logger: pidLogger ),
-    ExampleAppSwiftlet( pathPrefix: "/example" ),
+    ExampleAppSwiftlet( pathPrefix: "/example"),
     SSLProxySwiftlet( logger: pidLogger ),
     ProxySwiftlet( logger: pidLogger ),
-    DocumentSwiftlet( documentRoot: String.fromCString( getenv( "HOME" ) )!+"/Sites" )
+    DocumentSwiftlet( documentRoot: String(cString: getenv( "HOME" ) )+"/Sites" )
 ], workers: 4 )
 #endif
 
 // let pthreads do their work
-sleep( 1_000_000_000 )
+RunLoop.current.run()

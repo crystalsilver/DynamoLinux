@@ -11,7 +11,7 @@ import Foundation
 import Dynamo
 #endif
 
-private class TickTackGameEngine {
+private class TickTackGameEngine: NSObject {
 
     var board = [["white", "white", "white"], ["white", "white", "white"], ["white", "white", "white"]]
 
@@ -45,11 +45,11 @@ private class TickTackGameEngine {
 
 }
 
-public class TickTackToeSwiftlet: SessionApplication {
+open class TickTackToeSwiftlet: SessionApplication {
 
-    private var engine = TickTackGameEngine()
+    fileprivate var engine = TickTackGameEngine()
 
-    override public func processRequest( out: DynamoHTTPConnection, pathInfo: String, parameters: [String:String], cookies: [String:String] ) {
+    override open func processRequest( out: DynamoHTTPConnection, pathInfo: String, parameters: [String:String], cookies: [String:String] ) {
         var cookies = cookies
 
         // reset board and keep scores
@@ -58,14 +58,14 @@ public class TickTackToeSwiftlet: SessionApplication {
             if whoWon != "draw" {
                 let newCount = cookies[whoWon] ?? "0"
                 let newValue = "\(Int(newCount)!+1)"
-                out.setCookie( whoWon, value: newValue, expires: 60 )
+                out.setCookie( name: whoWon, value: newValue, expires: 60 )
                 cookies[whoWon] = newValue
             }
         }
 
         let scores = cookies.keys
             .filter( { $0 == "red" || $0 == "green" } )
-            .map( { "\($0) wins: \(cookies[$0]!)" } ).joinWithSeparator( ", " )
+            .map( { "\($0) wins: \(cookies[$0]!)" } ).joined( separator: ", " )
 
         out.print( html( nil ) + head( title( "Tick Tack Toe Example" ) +
             style( "body, table { font: 10pt Arial; } " +
@@ -76,7 +76,7 @@ public class TickTackToeSwiftlet: SessionApplication {
         // make move
         let player = parameters["player"] ?? "green"
 
-        if let x = parameters["x"]?.toInt(), y = parameters["y"]?.toInt() {
+        if let x = parameters["x"]?.toInt(), let y = parameters["y"]?.toInt() {
             engine.board[y][x] = player
         }
 

@@ -3,7 +3,6 @@
 //
 
 import Foundation
-
 #if !os(iOS)
 import Dynamo
 #endif
@@ -36,7 +35,7 @@ public class NumberGuesserSwiftlet: SessionApplication {
                 clearSession()
 response += "                <h3>You're right!</h3>\n                <input type=\"submit\" value=\"Play again\">\n                <a href=\"/\">Back to menu</a>\n                "
 
-                    out.response( response )
+                    out.response( text: response )
                     return
             }
             else if guess < number  {
@@ -50,9 +49,9 @@ response += "    <h3>Thinking of a number between 1 and 100..</h3>\n    "
  for guess in history {
 response += "        \(guess)<br>\n    "
  }
-response += "    Enter a guess: <input type=\"textfield\" name=\"guess\">\n    <input type=\"submit\" value=\"Enter\">\n    </form>\n</body>\n</html>"
+response += "    Enter a guess: <input type=\"textfield\" name=\"guess\">\n    <input type=\"submit\" value=\"Enter\">\n    </form>\n</body>\n</html>\n"
 
-        out.response( response )
+        out.response( text: response )
     }
 
 }
